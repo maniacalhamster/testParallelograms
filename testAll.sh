@@ -16,11 +16,19 @@ done
 # final case '20 newline n(o) newline' will reject a replay
 INPUT=$INPUT"20\nn\n"
 
-# pipes the content of INPUT to both student and public scripts, redirecting
-# both output to respective output files later used to check differences
-printf $INPUT | ./parallelograms.sh > myOutput
+# pipes the content of INPUT to both student script and public driver, using te
+# to display results to user as well as write to an output file
+printf $INPUT | ./parallelograms.sh | tee myOutput
 echo "Student script done - saved to 'myOutput'"
-printf $INPUT | parallelograms > publicOutput
+
+# Notifies user that testing of the student script has finished and been written
+# to an output file, then prompts user to continue to public driver
+echo -e "\nNow press Enter to see how fast the public driver executes"
+read
+
+# Similar logic to student script - INPUT string piped into public driver and
+# output sent to both stdout and output file using tee
+printf $INPUT | parallelograms | tee publicOutput
 echo "Public script done  - saved to 'publicOutput'"
 
 # emptiness of diff command used to determine the need for vimdiff
